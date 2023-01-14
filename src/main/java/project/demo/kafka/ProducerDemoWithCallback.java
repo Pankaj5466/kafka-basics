@@ -1,8 +1,6 @@
 package project.demo.kafka;
 
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +30,21 @@ public class ProducerDemoWithCallback {
                 new ProducerRecord<>("demo_java","hello world gaya?");
 
         //Step4: send data in async way
-        producer.send(producerRecord);
+        producer.send(producerRecord, new Callback() {
+            @Override
+            public void onCompletion(RecordMetadata metadata, Exception e) {
+                if(e == null){
+                    log.info("Received new metadata/ \n" +
+                            "Topic: " + metadata.topic() + "\n" +
+                            "Partition: " + metadata.partition() +"\n"+
+                            "Offset: " +  metadata.offset() + "\n" +
+                            "TimeStamp: "+ metadata.timestamp() + "\n");
+                }
+                else {
+                    log.error("Error While sending data to kafka\n");
+                }
+            }
+        });
 
         //flush data (synchronous) //wait to send data
         producer.flush();
