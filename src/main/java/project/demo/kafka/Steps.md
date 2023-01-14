@@ -12,3 +12,7 @@
 `kafka-topic --bootstrap-server 127.0.0.1:9092 --create --topic demo_java --partitions 3 --replication-factor 1`
 `kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic demo_java`
 (f) run the ProducerDemo class in IDE & check if message is printed on console client or not.
+
+# ProducerDemoWithKeyValue.java
+- pass (topic,key,value) during record creation to creat a (key,value) kafka record
+- during producer.send(...) pass a callback function
